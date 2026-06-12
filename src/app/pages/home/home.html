@@ -1,0 +1,104 @@
+<div class="home">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <span class="navbar__logo">Roof</span>
+    <button class="btn btn--ghost btn--sm" (click)="signOut()">Çıkış</button>
+  </nav>
+
+  <!-- Hero banner -->
+  <div class="hero-banner">
+    <div class="hero-banner__img"></div>
+    <div class="hero-banner__overlay"></div>
+    <div class="hero-banner__text">
+      <h1>Samsun'un<br>buluşma noktası</h1>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="home-content">
+
+    <!-- Profil kartı -->
+    @if (user()) {
+      <div class="profile-card">
+        <div class="profile-card__avatar-wrap">
+          @if (user()!.avatar_url) {
+            <img [src]="user()!.avatar_url" class="profile-card__avatar" alt="" />
+          } @else {
+            <div class="profile-card__avatar-placeholder">
+              {{ (user()!.name || user()!.email || '?')[0].toUpperCase() }}
+            </div>
+          }
+          <label class="profile-card__avatar-edit" for="avatarInput" [class.uploading]="avatarUploading()">
+            @if (avatarUploading()) {
+              <div class="spinner-sm"></div>
+            } @else {
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            }
+          </label>
+          <input id="avatarInput" type="file" accept="image/*" (change)="onAvatarChange($event)" hidden />
+        </div>
+        <div class="profile-card__info">
+          <p class="profile-card__name">{{ user()!.name || user()!.email }}</p>
+          <p class="profile-card__email">{{ user()!.email }}</p>
+        </div>
+      </div>
+    }
+
+    @if (status() === 'passive') {
+      <div class="status-card status-card--passive">
+        <div class="status-card__icon">⏳</div>
+        <div>
+          <p class="status-card__title">Hesabınız onay bekliyor</p>
+          <p class="status-card__sub">Yönetici hesabınızı aktifleştirdiğinde tüm özelliklere erişebilirsiniz.</p>
+        </div>
+      </div>
+    }
+
+    @if (status() === 'active' || status() === 'admin') {
+      <div class="action-grid">
+        <button class="action-card" (click)="goToQr()">
+          <div class="action-card__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+              <path d="M14 14h3v3h-3zM17 17h3v3h-3zM14 20h3"/>
+            </svg>
+          </div>
+          <div>
+            <p class="action-card__title">QR Oluştur</p>
+            <p class="action-card__sub">Üyeliğini göster</p>
+          </div>
+          <svg class="action-card__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+
+        <button class="action-card" (click)="goToPlaces()">
+          <div class="action-card__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div>
+            <p class="action-card__title">Mekan Listesi</p>
+            <p class="action-card__sub">Kampanyaları keşfet</p>
+          </div>
+          <svg class="action-card__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    }
+
+    @if (status() === 'admin') {
+      <button class="admin-card" (click)="goToAdmin()">
+        <div class="admin-card__left">
+          <span class="admin-card__icon">⚙️</span>
+          <div>
+            <p class="admin-card__title">Admin Paneli</p>
+            <p class="admin-card__sub">Üyeler, mekanlar ve kampanyalar</p>
+          </div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    }
+
+  </div>
+</div>

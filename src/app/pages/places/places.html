@@ -1,0 +1,46 @@
+<div class="places-page">
+  <div class="places-topbar">
+    <button class="btn btn--ghost btn--sm" (click)="goBack()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Geri
+    </button>
+    <span class="places-topbar__title">Mekan Listesi</span>
+    <span></span>
+  </div>
+
+  <div class="places-content">
+    @if (places().length === 0) {
+      <div class="empty-state">Henüz mekan eklenmemiş.</div>
+    }
+
+    @for (place of places(); track place.id) {
+      <div class="place-card" [class.open]="expandedPlaceId() === place.id" (click)="toggle(place.id)">
+        <div class="place-card__row">
+          <div class="place-card__info">
+            <p class="place-card__name">{{ place.name }}</p>
+            @if ((place.campaigns ?? []).length > 0) {
+              <span class="badge badge--accent">{{ place.campaigns!.length }} kampanya</span>
+            } @else {
+              <span class="place-card__none">Kampanya yok</span>
+            }
+          </div>
+          <svg class="place-card__chevron" [class.open]="expandedPlaceId() === place.id"
+            width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </div>
+
+        @if (expandedPlaceId() === place.id && (place.campaigns ?? []).length > 0) {
+          <div class="campaigns" (click)="$event.stopPropagation()">
+            @for (c of place.campaigns ?? []; track c.id) {
+              <div class="campaign-item">
+                <span class="campaign-item__dot"></span>
+                <span>{{ c.description }}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

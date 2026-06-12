@@ -1,1 +1,148 @@
-/* You can add global styles to this file, and also import other style files */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:            #f7f5f1;
+  --surface:       #ffffff;
+  --surface-2:     #f0ede8;
+  --border:        #e8e4dd;
+  --border-hover:  #d5cfc6;
+
+  --text:          #1a1714;
+  --text-2:        #6b6560;
+  --text-3:        #a09a93;
+
+  --accent:        #c9a84c;
+  --accent-light:  #f5ecd4;
+  --accent-dark:   #a8852d;
+
+  --green:         #16a34a;
+  --green-light:   #dcfce7;
+  --red:           #dc2626;
+  --red-light:     #fee2e2;
+
+  --radius-sm:     6px;
+  --radius:        12px;
+  --radius-lg:     20px;
+  --radius-xl:     28px;
+
+  --shadow-sm:     0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+  --shadow:        0 4px 16px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg:     0 12px 40px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.06);
+
+  --font-body:     'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display:  'Playfair Display', Georgia, serif;
+
+  --hero-img: url('/hero.jpg');
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+a { color: inherit; text-decoration: none; }
+
+button { font-family: inherit; cursor: pointer; }
+
+input, textarea {
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+// ── Reusable utility classes ───────────────────────────
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  letter-spacing: 0.01em;
+
+  &--primary {
+    background: var(--text);
+    color: #fff;
+    &:hover:not(:disabled) { background: #2d2926; transform: translateY(-1px); box-shadow: var(--shadow); }
+    &:active { transform: translateY(0); }
+  }
+
+  &--secondary {
+    background: var(--surface-2);
+    color: var(--text);
+    &:hover:not(:disabled) { background: var(--border); }
+  }
+
+  &--accent {
+    background: var(--accent);
+    color: #fff;
+    &:hover:not(:disabled) { background: var(--accent-dark); transform: translateY(-1px); }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: var(--text-2);
+    &:hover { background: var(--surface-2); color: var(--text); }
+  }
+
+  &--danger {
+    background: var(--red-light);
+    color: var(--red);
+    &:hover { background: #fecaca; }
+  }
+
+  &:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+  &--sm { padding: 0.45rem 0.875rem; font-size: 0.8rem; border-radius: var(--radius-sm); }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+
+  &--active { background: var(--green-light); color: var(--green); }
+  &--passive { background: var(--surface-2); color: var(--text-3); }
+  &--accent { background: var(--accent-light); color: var(--accent-dark); }
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--text-3);
+  padding: 3rem 1rem;
+  font-size: 0.9rem;
+}

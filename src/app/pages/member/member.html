@@ -1,0 +1,40 @@
+<div class="member-page">
+  @if (loading()) {
+    <div class="member-loading">
+      <div class="spinner"></div>
+    </div>
+  } @else if (expired()) {
+    <div class="member-card member-card--expired">
+      <span class="member-card__icon">⏱</span>
+      <h2>QR Kodunun Süresi Doldu</h2>
+      <p>Bu QR kodu 60 saniye geçerlidir.<br>Üyeden yeni bir QR oluşturmasını isteyin.</p>
+    </div>
+  } @else if (notFound()) {
+    <div class="member-card member-card--error">
+      <span class="member-card__icon">🔍</span>
+      <h2>Üye Bulunamadı</h2>
+      <p>Bu QR kodu geçersiz görünüyor.</p>
+    </div>
+  } @else if (user()) {
+    <div class="member-scene">
+      <div class="member-scene__bg"></div>
+      <div class="member-scene__overlay"></div>
+      <div class="member-card member-card--profile">
+        @if (user()!.avatar_url) {
+          <img [src]="user()!.avatar_url" class="member-card__avatar" alt="" />
+        } @else {
+          <div class="member-card__avatar-placeholder">
+            {{ (user()!.name || user()!.email || '?')[0].toUpperCase() }}
+          </div>
+        }
+        <h1 class="member-card__name">{{ user()!.name || user()!.email }}</h1>
+        <p class="member-card__tagline">bir <strong>Roof Samsun</strong> üyesidir</p>
+        <span class="badge" [class.badge--active]="user()!.status === 'active'" [class.badge--passive]="user()!.status === 'passive'">
+          {{ user()!.status === 'active' ? '✓ Aktif Üye' : 'Pasif Üye' }}
+        </span>
+        <div class="member-card__divider"></div>
+        <p class="member-card__brand">Roof Samsun</p>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,126 @@
+<div class="admin-page">
+
+  <div class="admin-topbar">
+    <button class="btn btn--ghost btn--sm" (click)="goBack()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Geri
+    </button>
+    <h1>Admin Paneli</h1>
+  </div>
+
+  <div class="admin-tabs">
+    <button class="admin-tab" [class.active]="activeTab() === 'users'" (click)="setTab('users')">Üyeler</button>
+    <button class="admin-tab" [class.active]="activeTab() === 'places'" (click)="setTab('places')">Mekanlar</button>
+  </div>
+
+  <div class="admin-content">
+
+    <!-- ÜYELER -->
+    @if (activeTab() === 'users') {
+      <div class="users-table">
+        <div class="overflow-x">
+          <table>
+            <thead>
+              <tr>
+                <th>Üye</th>
+                <th>Email</th>
+                <th>Durum</th>
+                <th>İşlem</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of users(); track user.id) {
+                <tr>
+                  <td>
+                    <div class="user-info">
+                      @if (user.avatar_url) {
+                        <img [src]="user.avatar_url" alt="" />
+                      }
+                      <span>{{ user.name || '—' }}</span>
+                    </div>
+                  </td>
+                  <td style="color:var(--text-2)">{{ user.email }}</td>
+                  <td>
+                    <span class="badge" [class.badge--active]="user.status === 'active'" [class.badge--passive]="user.status === 'passive'">
+                      {{ user.status === 'active' ? 'Aktif' : 'Pasif' }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="user-actions">
+                      @if (user.status === 'passive') {
+                        <button class="btn btn--primary btn--sm" (click)="activate(user.id)">Aktif Et</button>
+                      } @else {
+                        <button class="btn btn--secondary btn--sm" (click)="deactivate(user.id)">Pasif Et</button>
+                      }
+                      <button class="btn btn--danger btn--sm" (click)="deleteUser(user.id)">Sil</button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        @if (users().length === 0) {
+          <div class="empty-state">Henüz kullanıcı yok.</div>
+        }
+      </div>
+    }
+
+    <!-- MEKANLAR -->
+    @if (activeTab() === 'places') {
+      <div class="places-section">
+
+        <div class="add-row">
+          <input [(ngModel)]="newPlaceName" placeholder="Yeni mekan adı…" class="text-input" (keyup.enter)="addPlace()" />
+          <button class="btn btn--primary" (click)="addPlace()">Ekle</button>
+        </div>
+
+        @if (places().length === 0) {
+          <div class="empty-state">Henüz mekan yok.</div>
+        }
+
+        @for (place of places(); track place.id) {
+          <div class="place-card">
+            <div class="place-header" (click)="togglePlace(place.id)">
+              <div class="place-title">
+                <span class="chevron" [class.open]="expandedPlaceId() === place.id">›</span>
+                <strong>{{ place.name }}</strong>
+                <span class="badge" [class.badge--active]="place.status === 'active'" [class.badge--passive]="place.status === 'passive'">
+                  {{ place.status === 'active' ? 'Aktif' : 'Pasif' }}
+                </span>
+                <span class="campaign-count">{{ place.campaigns?.length || 0 }} kampanya</span>
+              </div>
+              <div class="place-actions">
+                @if (place.status === 'active') {
+                  <button class="btn btn--secondary btn--sm" (click)="$event.stopPropagation(); setPlaceStatus(place.id, 'passive')">Pasif Et</button>
+                } @else {
+                  <button class="btn btn--primary btn--sm" (click)="$event.stopPropagation(); setPlaceStatus(place.id, 'active')">Aktif Et</button>
+                }
+                <button class="btn btn--danger btn--sm" (click)="$event.stopPropagation(); deletePlace(place.id)">Sil</button>
+              </div>
+            </div>
+
+            @if (expandedPlaceId() === place.id) {
+              <div class="campaigns">
+                @for (campaign of place.campaigns ?? []; track campaign.id) {
+                  <div class="campaign-row">
+                    <span>{{ campaign.description }}</span>
+                    <button class="btn btn--danger btn--sm" (click)="deleteCampaign(campaign.id)">Sil</button>
+                  </div>
+                }
+                @if ((place.campaigns ?? []).length === 0) {
+                  <p class="empty-campaigns">Henüz kampanya yok.</p>
+                }
+                <div class="add-campaign-row">
+                  <input [(ngModel)]="newCampaignTexts[place.id]" placeholder="Kampanya açıklaması…" class="text-input" (keyup.enter)="addCampaign(place.id)" />
+                  <button class="btn btn--secondary" (click)="addCampaign(place.id)">Ekle</button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+</div>
