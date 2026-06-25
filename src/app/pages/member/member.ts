@@ -15,6 +15,7 @@ export class Member implements OnInit {
   loading = signal(true);
   notFound = signal(false);
   expired = signal(false);
+  accessDenied = signal(false);
 
   constructor(private route: ActivatedRoute, private supabase: SupabaseService) {}
 
@@ -33,7 +34,14 @@ export class Member implements OnInit {
       .eq('id', id)
       .single();
 
-    if (error || !data) {
+    if (error) {
+      // PGRST301 = RLS/auth error, PGRST116 = no rows found
+      if (error.code === 'PGRST301' || error.message?.includes('permission')) {
+        this.accessDenied.set(true);
+      } else {
+        this.notFound.set(true);
+      }
+    } else if (!data) {
       this.notFound.set(true);
     } else {
       this.user.set(data);

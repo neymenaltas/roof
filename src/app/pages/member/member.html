@@ -9,6 +9,12 @@
       <h2>QR Kodunun Süresi Doldu</h2>
       <p>Bu QR kodu 60 saniye geçerlidir.<br>Üyeden yeni bir QR oluşturmasını isteyin.</p>
     </div>
+  } @else if (accessDenied()) {
+    <div class="member-card member-card--error">
+      <span class="member-card__icon">🔒</span>
+      <h2>Erişim Hatası</h2>
+      <p>Üye bilgisi yüklenemedi. Lütfen Supabase'de <strong>users</strong> tablosuna <strong>anon</strong> SELECT izni verin.</p>
+    </div>
   } @else if (notFound()) {
     <div class="member-card member-card--error">
       <span class="member-card__icon">🔍</span>
